@@ -1,0 +1,111 @@
+package gevorgyan.vahan.newsfeed.ui.adapter;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import gevorgyan.vahan.newsfeed.R;
+import gevorgyan.vahan.newsfeed.domain.model.Article;
+import gevorgyan.vahan.newsfeed.remote.glide.ImageLoader;
+import gevorgyan.vahan.newsfeed.util.ImageUtils;
+
+public class PinnedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private LayoutInflater inflater;
+    private List<Article> articles;
+
+    private Context context;
+
+    private ItemsClickListener itemClickListener;
+
+    public interface ItemsClickListener {
+        void onClick(Article article, ImageView imageView);
+    }
+
+    public PinnedArticlesAdapter(Context context, List<Article> articles) {
+        this.inflater = LayoutInflater.from(context);
+        this.context = context;
+        this.articles = articles;
+
+    }
+
+
+    public void setItemClickListener(ItemsClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+    public void swap(List<Article> articles) {
+        this.articles.clear();
+        this.articles.addAll(articles);
+        notifyDataSetChanged();
+    }
+
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = inflater.inflate(R.layout.list_item_pinned_articles, parent, false);
+        return new ViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof ViewHolder)
+            ((ViewHolder) holder).bindData(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return articles == null ? 0 : articles.size();
+    }
+
+
+    private  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        protected TextView textViewTitle;
+        protected TextView textViewCaption;
+        protected ImageView imageViewThumbnail;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            textViewTitle = itemView.findViewById(R.id.textview_title);
+            textViewCaption = itemView.findViewById(R.id.textview_caption);
+            imageViewThumbnail = itemView.findViewById(R.id.imageview_thumbnail);
+
+            itemView.setOnClickListener(this);
+        }
+
+
+        public void bindData(int position) {
+            Article article = articles.get(position);
+            textViewTitle.setText(article.getWebTitle());
+         //   String caption = context.getString(R.string.caption, article.getSectionName());
+          //  textViewCaption.setText(caption);
+            ImageLoader.load(itemView.getContext(), imageViewThumbnail, article.getThumbnailUrl(), null);
+
+            Bitmap bm = null;
+            if (imageViewThumbnail.getDrawable() != null)
+                bm = ((BitmapDrawable) imageViewThumbnail.getDrawable()).getBitmap();
+
+            if (bm != null && article.getImageBitmap() == null) {
+                byte[] data = ImageUtils.getBitmapAsByteArray(bm);
+                article.setImageBitmap(data);
+            }
+
+        }
+
+        @Override
+        public void onClick(View v) {
+        //    Article article = articles.get(getLayoutPosition());
+         //   itemClickListener.onClick(article, imageViewThumbnail);
+        }
+    }
+
+}

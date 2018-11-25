@@ -1,0 +1,14 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="SSBasedInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <searchConfiguration name="Jake says &quot;Say mNo to Hungarian Notation&quot;" text="class $Class$ { &#10;  $FieldType$ $Field$ = $Init$;&#10;}" recursive="false" caseInsensitive="true" type="JAVA">
+        <constraint name="Class" within="" contains="" />
+        <constraint name="FieldType" within="" contains="" />
+        <constraint name="Field" regexp="(m|s)[A-Z].*" maxCount="2147483647" target="true" wholeWordsOnly="true" within="" contains="" />
+        <constraint name="Init" minCount="0" within="" contains="" />
+        <constraint name="__context__" within="" contains="" />
+      </searchConfiguration>
+    </inspection_tool>
+  </profile>
+</component>

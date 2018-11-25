@@ -1,0 +1,79 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+
+    ext {
+        isCi = Boolean.parseBoolean(System.getProperty('CI', 'false'))
+
+        versions = [
+                // sdk and tools
+                'minSdk'        : 14,
+                'compileSdk'    : 28,
+                'targetSdk'     : 28,
+                'buildTools'    : "28.0.3",
+
+                // dependencies
+                'kotlin'        : "1.3.0",
+                'supportLibrary': "28.0.0",
+                'legacyCoreUi'  : "1.0.0",
+                'lifecycle'     : "2.0.0",
+                'multidex'      : "2.0.0",
+                'annotation'    : "1.0.0",
+                'appcompat'     : "1.0.2",
+                'material'      : "1.0.0",
+                'cardview'      : "1.0.0",
+                'recyclerview'  : "1.0.0",
+                'retrofit'      : "2.4.0",
+                'okhttp'        : "3.10.0",
+                'stetho'        : "1.5.0"
+        ]
+    }
+
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.google.gms:google-services:4.2.0'
+        classpath 'com.google.firebase:firebase-plugins:1.1.5'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+        
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+        maven {
+            url "https://maven.google.com"
+        }
+    }
+}
+
+subprojects {
+    configurations.all {
+        resolutionStrategy {
+            eachDependency { details ->
+                // Force all of the primary support libraries to use the same version.
+                if (details.requested.group == 'com.android.support'
+                        && details.requested.name != 'multidex'
+                        && details.requested.name != 'multidex-instrumentation') {
+                    details.useVersion versions.supportLibrary
+                }
+            }
+        }
+    }
+}
+
+
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
