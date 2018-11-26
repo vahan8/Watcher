@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import gevorgyan.vahan.newsfeed.R;
 import gevorgyan.vahan.newsfeed.domain.enums.ListViewMode;
 import gevorgyan.vahan.newsfeed.domain.model.Article;
+import gevorgyan.vahan.newsfeed.util.DateUtils;
 
 public class SavedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_LIST = 0;
@@ -107,15 +108,12 @@ public class SavedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         public abstract void initBaseFields();
 
+        //If card and list modes has different fields they should override this function
         void bindData(int position) {
             Article article = articles.get(position);
             textViewTitle.setText(article.getWebTitle());
-            String caption = context.getString(R.string.caption, article.getSectionName());
             textViewCaption.setText(article.getSectionName());
-            Date date = article.getWebPublicationDate();
-            SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yy HH:mm", Locale.getDefault());
-            String publicationDate = formatter.format(date);
-            textViewDate.setText(publicationDate);
+            textViewDate.setText(DateUtils.getFormattedDate(article.getWebPublicationDate()));
 
             Bitmap bm = BitmapFactory.decodeByteArray(article.getImageBitmap(), 0, article.getImageBitmap().length);
             imageViewThumbnail.setImageBitmap(bm);

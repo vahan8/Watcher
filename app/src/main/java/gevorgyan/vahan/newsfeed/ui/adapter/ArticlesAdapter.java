@@ -20,6 +20,7 @@ import gevorgyan.vahan.newsfeed.R;
 import gevorgyan.vahan.newsfeed.domain.model.Article;
 import gevorgyan.vahan.newsfeed.domain.enums.ListViewMode;
 import gevorgyan.vahan.newsfeed.remote.glide.ImageLoader;
+import gevorgyan.vahan.newsfeed.util.DateUtils;
 
 public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_LIST = 0;
@@ -162,11 +163,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public void bindData(int position) {
             Article article = articles.get(position);
             textViewTitle.setText(article.getWebTitle());
-            Date date = article.getWebPublicationDate();
-            SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yy HH:mm", Locale.getDefault());
-            String publicationDate = formatter.format(date);
-            textViewDate.setText(publicationDate);
-            String caption = context.getString(R.string.caption, article.getSectionName());
+            textViewDate.setText(DateUtils.getFormattedDate(article.getWebPublicationDate()));
             textViewCaption.setText(article.getSectionName());
             ImageLoader.load(itemView.getContext(), imageViewThumbnail, article.getThumbnailUrl(), null);
         }

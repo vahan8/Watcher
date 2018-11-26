@@ -8,13 +8,12 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Calendar;
-
 import androidx.appcompat.widget.Toolbar;
 import gevorgyan.vahan.newsfeed.R;
 import gevorgyan.vahan.newsfeed.data.dao.ArticleDao;
 import gevorgyan.vahan.newsfeed.domain.model.Article;
 import gevorgyan.vahan.newsfeed.remote.glide.ImageLoader;
+import gevorgyan.vahan.newsfeed.util.DateUtils;
 import gevorgyan.vahan.newsfeed.util.ImageUtils;
 
 public class ArticleActivity extends BaseActivity {
@@ -130,7 +129,7 @@ public class ArticleActivity extends BaseActivity {
         if (data != null) {
             article.setImageBitmap(data);
         }
-        article.setCreationDate(Calendar.getInstance().getTime());
+        article.setCreationDate(DateUtils.getCurrentDate());
     }
 
 }
