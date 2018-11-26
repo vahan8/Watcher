@@ -27,11 +27,11 @@
             android:required="false"/>
 
         <activity
-            android:name=".ui.ScrollingActivity"
+            android:name=".ui.activity.ScrollingActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".ui.main.MainActivity">
+        <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -39,13 +39,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.ArticleActivity"
+            android:name=".ui.activity.ArticleActivity"
             android:label="@string/article"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <service
-            android:name=".service.RefreshItemsJobService"
+            android:name=".remote.background.RefreshItemsJobService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:stopWithTask="false">
@@ -68,7 +68,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ui.BaseActivity"/>
+        <activity android:name=".ui.activity.BaseActivity"/>
 
         <service
             android:name=".service.RefreshItemsJobIntentService"

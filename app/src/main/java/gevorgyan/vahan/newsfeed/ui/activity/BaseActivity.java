@@ -1,4 +1,4 @@
-package gevorgyan.vahan.newsfeed.ui;
+package gevorgyan.vahan.newsfeed.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import gevorgyan.vahan.newsfeed.App;

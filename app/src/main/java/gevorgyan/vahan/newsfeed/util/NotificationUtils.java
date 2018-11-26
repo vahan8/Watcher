@@ -12,7 +12,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import gevorgyan.vahan.newsfeed.App;
 import gevorgyan.vahan.newsfeed.R;
-import gevorgyan.vahan.newsfeed.ui.main.MainActivity;
+import gevorgyan.vahan.newsfeed.ui.activity.MainActivity;
 
 public final class NotificationUtils {
     private static final int NEWSFEED_NOTIFICATION_CHANNEL_ID = R.string.notification_channel_id;

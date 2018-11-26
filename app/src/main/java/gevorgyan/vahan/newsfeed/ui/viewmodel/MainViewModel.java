@@ -1,10 +1,8 @@
-package gevorgyan.vahan.newsfeed.ui.main;
+package gevorgyan.vahan.newsfeed.ui.viewmodel;
 
 import android.content.IntentFilter;
 import android.util.Log;
-import android.view.View;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +16,7 @@ import gevorgyan.vahan.newsfeed.domain.model.SearchQueryResponse;
 import gevorgyan.vahan.newsfeed.remote.Api;
 import gevorgyan.vahan.newsfeed.remote.RequestCallbacks;
 import gevorgyan.vahan.newsfeed.util.Constants;
-import gevorgyan.vahan.newsfeed.util.RefreshItemsReceiver;
+import gevorgyan.vahan.newsfeed.remote.background.RefreshItemsReceiver;
 
 public class MainViewModel extends ViewModel {
     private MutableLiveData<List<Article>> articlesObservable;

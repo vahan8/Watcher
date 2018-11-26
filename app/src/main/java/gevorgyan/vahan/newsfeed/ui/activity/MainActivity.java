@@ -1,4 +1,4 @@
-package gevorgyan.vahan.newsfeed.ui.main;
+package gevorgyan.vahan.newsfeed.ui.activity;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -8,10 +8,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.annotation.NonNull;
 import gevorgyan.vahan.newsfeed.App;
 import gevorgyan.vahan.newsfeed.R;
-import gevorgyan.vahan.newsfeed.ui.BaseActivity;
-import gevorgyan.vahan.newsfeed.ui.saved.SavedArticlesFragment;
-import gevorgyan.vahan.newsfeed.util.JobDispatcher;
-import gevorgyan.vahan.newsfeed.util.MyJobScheduler;
+import gevorgyan.vahan.newsfeed.ui.fragment.MainFragment;
+import gevorgyan.vahan.newsfeed.ui.fragment.SavedArticlesFragment;
+import gevorgyan.vahan.newsfeed.remote.background.NewsfeedJobScheduler;
 import gevorgyan.vahan.newsfeed.util.NotificationUtils;
 
 public class MainActivity extends BaseActivity {
@@ -20,7 +19,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //  setTheme(android.R.style.Theme_Light);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         if (savedInstanceState == null) {
@@ -36,7 +34,7 @@ public class MainActivity extends BaseActivity {
         //   JobDispatcher.scheduleRefreshArticles(App.getContext());
         //   JobDispatcher.scheduleSendNotification(App.getContext());
 
-        MyJobScheduler.scheduleJob(App.getContext());
+        NewsfeedJobScheduler.scheduleJRefreshItemsJob(App.getContext());
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

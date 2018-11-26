@@ -86,7 +86,7 @@ public class ArticleDao {
         }
     }
 
-    private static Cursor getArticlesCursor(boolean onlyPinned, String... orderByColumns) throws SQLiteException {
+    private static Cursor getArticlesCursor(String articleId, Boolean onlyPinned, String... orderByColumns) throws SQLiteException {
         SQLiteDatabase db = DbHelper.getInstance().getReadableDatabase();
         String sql = "select "
                 + ID                    + " , "
@@ -106,13 +106,17 @@ public class ArticleDao {
 
         ArrayList<String> args = new ArrayList<>();
         String whereAnd = " where ";
-
-        if (onlyPinned) {
-            sql += whereAnd + IS_PINNED + "=?";
-            args.add("1");
+        if (articleId != null) {
+            sql += whereAnd + ID + "=?";
+            args.add(articleId);
             whereAnd = " and ";
         }
 
+        if (onlyPinned != null) {
+            sql += whereAnd + IS_PINNED + "=?";
+            args.add(onlyPinned ? "1" : "0");
+            whereAnd = " and ";
+        }
 
         if (orderByColumns.length > 0) {
             sql = sql + " order by " + orderByColumns[0];
@@ -121,13 +125,12 @@ public class ArticleDao {
             }
         }
         Cursor cursor = db.rawQuery(sql, args.toArray(new String[]{}));
-     //   db.close();
         return cursor;
     }
 
-    public static List<Article> getArticles(boolean onlyPinned) throws SQLiteException {
+    public static List<Article> getArticles(Boolean onlyPinned) throws SQLiteException {
         List<Article> itemAvailableRems = new ArrayList<>();
-        Cursor cursor = getArticlesCursor(onlyPinned, CREATTION_DATE + " asc ");
+        Cursor cursor = getArticlesCursor(null, onlyPinned, CREATTION_DATE + " asc ");
         if (cursor.moveToFirst()) {
             do {
                 Article article = new Article();
@@ -148,28 +151,9 @@ public class ArticleDao {
         return itemAvailableRems;
     }
 
-//    private static Cursor getItemWarehouseRemsCursor(@NonNull String itemId) throws SQLiteException {
-//        String sql = "select "
-//                + "i." + ITEM_ID   + " as " + ITEM_ID   + " , "
-//                + "i." + WAREHOUSE + " as " + WAREHOUSE + " , "
-//                + "i." + QUANTITY  + " as " + QUANTITY  + " , "
-//                + "s." + SimpleDirectoryDao.NAME + " as " + Additional.WAREHOUSE_NAME + " , "
-//                + "s.rowid as _id "
-//                + " from "
-//                + SimpleDirectoryDao.TABLE_NAME + " as s "
-//                + " left join "
-//                + TABLE_NAME + " as  i "
-//                + " on "
-//                + "s." + SimpleDirectoryDao.CODE + "=" + "i." + WAREHOUSE
-//                + " and "
-//                + "i." + ITEM_ID + "=?"
-//                + " where "
-//                + "s." + SimpleDirectoryDao.ID + "='" + SimpleDirectoryType.WAREHOUSES.getId() + "'";
-//
-//        ArrayList<String> args = new ArrayList<>();
-//        args.add(itemId);
-//        return DbHelper.query(sql, args);
-//    }
-
+    public static boolean exists(String articleId){
+        Cursor cursor = getArticlesCursor(articleId, null);
+        return cursor.moveToFirst();
+    }
 
 }

@@ -20,8 +20,6 @@ import gevorgyan.vahan.newsfeed.domain.enums.ListViewMode;
 public class SavedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_LIST = 0;
     private static final int VIEW_TYPE_MINI_CARD = 1;
-    // for laod more
-    private static final int VIEW_TYPE_LOADING = 1;
 
     private LayoutInflater inflater;
     private List<Article> articles;
@@ -61,9 +59,6 @@ public class SavedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemViewType(int position) {
-        if (articles.get(position) == null)
-            return VIEW_TYPE_LOADING;
-
         switch (listViewMode) {
             case MINI_CARD:
                 return VIEW_TYPE_MINI_CARD;

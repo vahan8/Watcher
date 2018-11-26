@@ -1,4 +1,4 @@
-package gevorgyan.vahan.newsfeed.util;
+package gevorgyan.vahan.newsfeed.remote.background;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,7 +15,7 @@ public class RefreshItemsReceiver extends BroadcastReceiver {
     private RefreshItemsReceiverCallbacks callbacks;
 
     public interface RefreshItemsReceiverCallbacks{
-        public void refresh(List<Article> articles);
+        void refresh(List<Article> articles);
     };
 
     public RefreshItemsReceiver(RefreshItemsReceiverCallbacks callbacks){

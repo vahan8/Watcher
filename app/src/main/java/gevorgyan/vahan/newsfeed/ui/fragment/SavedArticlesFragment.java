@@ -1,4 +1,4 @@
-package gevorgyan.vahan.newsfeed.ui.saved;
+package gevorgyan.vahan.newsfeed.ui.fragment;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -22,8 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import gevorgyan.vahan.newsfeed.R;
 import gevorgyan.vahan.newsfeed.domain.enums.ListViewMode;
 import gevorgyan.vahan.newsfeed.domain.model.Article;
-import gevorgyan.vahan.newsfeed.ui.ArticleActivity;
+import gevorgyan.vahan.newsfeed.ui.activity.ArticleActivity;
 import gevorgyan.vahan.newsfeed.ui.adapter.SavedArticlesAdapter;
+import gevorgyan.vahan.newsfeed.ui.viewmodel.SavedArticlesViewModel;
 import gevorgyan.vahan.newsfeed.util.RecyclerViewUtils;
 
 public class SavedArticlesFragment extends Fragment {

@@ -11,7 +11,6 @@ import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 
 import gevorgyan.vahan.newsfeed.service.RefreshItemsFirebaseJobService;
-import gevorgyan.vahan.newsfeed.service.RefreshItemsJobService;
 import gevorgyan.vahan.newsfeed.service.SendNotificationsJobService;
 
 public class JobDispatcher {

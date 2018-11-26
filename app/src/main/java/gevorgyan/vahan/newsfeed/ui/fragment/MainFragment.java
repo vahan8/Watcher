@@ -1,9 +1,8 @@
-package gevorgyan.vahan.newsfeed.ui.main;
+package gevorgyan.vahan.newsfeed.ui.fragment;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,20 +19,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import gevorgyan.vahan.newsfeed.R;
 import gevorgyan.vahan.newsfeed.domain.model.Article;
 import gevorgyan.vahan.newsfeed.domain.enums.ListViewMode;
-import gevorgyan.vahan.newsfeed.ui.ArticleActivity;
-import gevorgyan.vahan.newsfeed.ui.PinnedArticlesViewModel;
+import gevorgyan.vahan.newsfeed.ui.activity.ArticleActivity;
+import gevorgyan.vahan.newsfeed.ui.viewmodel.PinnedArticlesViewModel;
 import gevorgyan.vahan.newsfeed.ui.adapter.ArticlesAdapter;
 import gevorgyan.vahan.newsfeed.ui.adapter.PinnedArticlesAdapter;
-import gevorgyan.vahan.newsfeed.util.Constants;
+import gevorgyan.vahan.newsfeed.ui.viewmodel.MainViewModel;
 import gevorgyan.vahan.newsfeed.util.RecyclerViewUtils;
-import gevorgyan.vahan.newsfeed.util.RefreshItemsReceiver;
 
 public class MainFragment extends Fragment {
 
@@ -80,7 +77,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onChanged(List<Article> articles) {
                 pinnedArticlesAdapter.swap(articles);
-                if(articles.size()==0)
+                if (articles.size() == 0)
                     pinnedArticlesLayout.setVisibility(View.GONE);
                 else
                     pinnedArticlesLayout.setVisibility(View.VISIBLE);
@@ -97,20 +94,13 @@ public class MainFragment extends Fragment {
             @Override
             public void onLoadMore() {
                 List<Article> articles = viewModel.getArticlesObservable().getValue();
-                viewModel.loadData(viewModel.getLastResponsePage()+1);
+                viewModel.loadData(viewModel.getLastResponsePage() + 1);
             }
         });
         articlesAdapter.setItemClickListener(new ArticlesAdapter.ItemsClickListener() {
             @Override
-            public void onClick(Article article, final ImageView imageView) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(ArticleActivity.KEY_ARTICLE, article);
-                Intent intent = new Intent(requireActivity(), ArticleActivity.class);
-                intent.putExtras(bundle);
-
-                View v = imageView.getRootView();
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(requireActivity(), imageView, getString(R.string.thumbnail));
-                startActivityForResult(intent, ACTIVITY_ARTICLE, options.toBundle());
+            public void onClick(Article article, ImageView imageView) {
+                openArticle(article, imageView);
             }
         });
 
@@ -122,6 +112,12 @@ public class MainFragment extends Fragment {
         pinnedArticlesRecyclerView.setHorizontalScrollBarEnabled(true);
 
         pinnedArticlesAdapter = new PinnedArticlesAdapter(requireActivity(), new ArrayList<Article>());
+        pinnedArticlesAdapter.setItemClickListener(new PinnedArticlesAdapter.ItemsClickListener() {
+            @Override
+            public void onClick(Article article, ImageView imageView) {
+                openArticle(article, imageView);
+            }
+        });
         pinnedArticlesRecyclerView.setAdapter(pinnedArticlesAdapter);
 
 //        RefreshItemsReceiver receiver = new RefreshItemsReceiver(new RefreshItemsReceiver.RefreshItemsReceiverCallbacks() {
@@ -153,12 +149,21 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-       // JobDispatcher.scheduleRefreshArticles(requireActivity());
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //JobDispatcher.stopRefreshArticles(requireActivity());
+    }
+
+    private void openArticle(Article article, final ImageView imageView) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ArticleActivity.KEY_ARTICLE, article);
+        Intent intent = new Intent(requireActivity(), ArticleActivity.class);
+        intent.putExtras(bundle);
+
+        // View v = imageView.getRootView();
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(requireActivity(), imageView, getString(R.string.thumbnail));
+        startActivityForResult(intent, ACTIVITY_ARTICLE, options.toBundle());
     }
 }

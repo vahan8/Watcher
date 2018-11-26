@@ -1,4 +1,4 @@
-package gevorgyan.vahan.newsfeed.ui;
+package gevorgyan.vahan.newsfeed.ui.viewmodel;
 
 import java.util.List;
 

@@ -1,8 +1,6 @@
 package gevorgyan.vahan.newsfeed.ui.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import gevorgyan.vahan.newsfeed.R;
 import gevorgyan.vahan.newsfeed.domain.model.Article;
 import gevorgyan.vahan.newsfeed.remote.glide.ImageLoader;
-import gevorgyan.vahan.newsfeed.util.ImageUtils;
 
 public class PinnedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private LayoutInflater inflater;
@@ -36,7 +33,6 @@ public class PinnedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.articles = articles;
 
     }
-
 
     public void setItemClickListener(ItemsClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
@@ -68,7 +64,7 @@ public class PinnedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
 
-    private  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         protected TextView textViewTitle;
         protected TextView textViewCaption;
         protected ImageView imageViewThumbnail;
@@ -86,25 +82,15 @@ public class PinnedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public void bindData(int position) {
             Article article = articles.get(position);
             textViewTitle.setText(article.getWebTitle());
-         //   String caption = context.getString(R.string.caption, article.getSectionName());
-          //  textViewCaption.setText(caption);
+            //   String caption = context.getString(R.string.caption, article.getSectionName());
+            //  textViewCaption.setText(caption);
             ImageLoader.load(itemView.getContext(), imageViewThumbnail, article.getThumbnailUrl(), null);
-
-            Bitmap bm = null;
-            if (imageViewThumbnail.getDrawable() != null)
-                bm = ((BitmapDrawable) imageViewThumbnail.getDrawable()).getBitmap();
-
-            if (bm != null && article.getImageBitmap() == null) {
-                byte[] data = ImageUtils.getBitmapAsByteArray(bm);
-                article.setImageBitmap(data);
-            }
-
         }
 
         @Override
         public void onClick(View v) {
-        //    Article article = articles.get(getLayoutPosition());
-         //   itemClickListener.onClick(article, imageViewThumbnail);
+            Article article = articles.get(getLayoutPosition());
+            itemClickListener.onClick(article, imageViewThumbnail);
         }
     }
 

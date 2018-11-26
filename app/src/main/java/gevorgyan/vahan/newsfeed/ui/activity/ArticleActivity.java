@@ -1,15 +1,9 @@
-package gevorgyan.vahan.newsfeed.ui;
-
-import androidx.appcompat.widget.Toolbar;
-import gevorgyan.vahan.newsfeed.R;
-import gevorgyan.vahan.newsfeed.data.dao.ArticleDao;
-import gevorgyan.vahan.newsfeed.domain.model.Article;
-import gevorgyan.vahan.newsfeed.remote.glide.ImageLoader;
-import gevorgyan.vahan.newsfeed.util.ImageUtils;
+package gevorgyan.vahan.newsfeed.ui.activity;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebSettings;
@@ -18,6 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Calendar;
+
+import androidx.appcompat.widget.Toolbar;
+import gevorgyan.vahan.newsfeed.R;
+import gevorgyan.vahan.newsfeed.data.dao.ArticleDao;
+import gevorgyan.vahan.newsfeed.domain.model.Article;
+import gevorgyan.vahan.newsfeed.remote.glide.ImageLoader;
+import gevorgyan.vahan.newsfeed.ui.activity.BaseActivity;
+import gevorgyan.vahan.newsfeed.util.ImageUtils;
 
 public class ArticleActivity extends BaseActivity {
 
@@ -50,35 +52,13 @@ public class ArticleActivity extends BaseActivity {
         ImageLoader.load(this, imageViewThumbnail, article.getThumbnailUrl(), null);
 
         WebView webView = findViewById(R.id.webview);
-
-//        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-//        Call<SearchResponse> call = apiInterface.getArticle(article.getApiUrl());
-//        call.enqueue(new Callback<SearchResponse>() {
-//            @Override
-//            public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<SearchResponse> call, Throwable t) {
-//
-//            }
-//        });
-
-
-        //     webView.getSettings().setAppCacheMaxSize( 5 * 1024 * 1024 ); // 5MB
         webView.getSettings().setAppCachePath(getApplicationContext().getCacheDir().getAbsolutePath());
         webView.getSettings().setAllowFileAccess(true);
         webView.getSettings().setAppCacheEnabled(true);
         webView.getSettings().setJavaScriptEnabled(true);
-        //  webView.getSettings().setCacheMode( WebSettings.LOAD_DEFAULT ); // load online by default
-
-        // if ( !isNetworkAvailable() ) { // loading offline
+        // can be checked if no network connection than use cache else network
         webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         webView.loadUrl(article.getWebUrl());
-        // }
-
-        //   webView.loadUrl( "http://www.google.com" );
 
     }
 
@@ -96,18 +76,24 @@ public class ArticleActivity extends BaseActivity {
                 return true;
             case R.id.menu_save:
                 article.setPinned(false);
-                save();
+                checkAndSave();
                 finish();
                 return true;
             case R.id.menu_pin:
                 article.setPinned(true);
-                save();
+                checkAndSave();
                 setResult(RESULT_OK);
                 finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void checkAndSave() {
+        Log.e("exist", "" + ArticleDao.exists(article.getId()));
+        if (!ArticleDao.exists(article.getId()))
+            save();
     }
 
     private void save() {
@@ -120,8 +106,8 @@ public class ArticleActivity extends BaseActivity {
             article.setImageBitmap(data);
         }
         article.setCreationDate(Calendar.getInstance().getTime());
+
         ArticleDao.insert(article);
     }
-
 
 }

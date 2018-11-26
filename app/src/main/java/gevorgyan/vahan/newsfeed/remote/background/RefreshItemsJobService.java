@@ -1,4 +1,4 @@
-package gevorgyan.vahan.newsfeed.service;
+package gevorgyan.vahan.newsfeed.remote.background;
 
 import android.app.job.JobParameters;
 import android.app.job.JobService;
@@ -16,9 +16,7 @@ import gevorgyan.vahan.newsfeed.domain.model.SearchQueryResponse;
 import gevorgyan.vahan.newsfeed.remote.Api;
 import gevorgyan.vahan.newsfeed.remote.RequestCallbacks;
 import gevorgyan.vahan.newsfeed.util.Constants;
-import gevorgyan.vahan.newsfeed.util.MyJobScheduler;
 import gevorgyan.vahan.newsfeed.util.NotificationUtils;
-import gevorgyan.vahan.newsfeed.util.RefreshItemsReceiver;
 
 public class RefreshItemsJobService extends JobService {
 
@@ -45,18 +43,17 @@ public class RefreshItemsJobService extends JobService {
                 }
                 //Reschedule the Service before calling job finished
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                    MyJobScheduler.scheduleJob(App.getContext());
+                    NewsfeedJobScheduler.scheduleJRefreshItemsJob(App.getContext());
                 jobFinished(job, false);
             }
 
             @Override
             public void onFailure() {
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                    MyJobScheduler.scheduleJob(App.getContext());
+                    NewsfeedJobScheduler.scheduleJRefreshItemsJob(App.getContext());
                 jobFinished(job, false);
             }
         };
-        // Api.checkForNewArticles(callbacks);
         Api.downloadArticles(1, callbacks);
         return true;
     }

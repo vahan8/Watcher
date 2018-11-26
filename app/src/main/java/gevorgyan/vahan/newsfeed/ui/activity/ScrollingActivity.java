@@ -1,4 +1,4 @@
-package gevorgyan.vahan.newsfeed.ui;
+package gevorgyan.vahan.newsfeed.ui.activity;
 
 import android.os.Bundle;
 import android.view.Menu;
