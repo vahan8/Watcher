@@ -1,9 +1,6 @@
 package gevorgyan.vahan.newsfeed.ui.activity;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebSettings;
@@ -31,17 +28,16 @@ public class ArticleActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getWindow().setAllowEnterTransitionOverlap(true);
         setContentView(R.layout.activity_article);
 
         //Get Article from bundle
         Bundle bundle = getIntent().getExtras();
         article = (Article) bundle.getSerializable(KEY_ARTICLE);
 
+        //Get article from db if it is saved
         Article articleFromDb = ArticleDao.getArticle(article.getId());
         if (articleFromDb != null)
             article = articleFromDb;
-        Log.e("pinned0", "" + article.isPinned());
 
         setTitle(article.getSectionName());
 
@@ -69,7 +65,6 @@ public class ArticleActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_article, menu);
-        Log.e("pinned", "" + article.isPinned());
         if (article.isPinned()) {
             MenuItem menuItemPin = menu.findItem(R.id.menu_pin);
             menuItemPin.setTitle(R.string.unpin);
@@ -104,8 +99,9 @@ public class ArticleActivity extends BaseActivity {
         if (!ArticleDao.exists(article.getId())) {
             article.setPinned(false);
             ArticleDao.insert(article);
-        } else
+        } else {
             ArticleDao.update(article);
+        }
     }
 
     private void pin() {
@@ -127,16 +123,11 @@ public class ArticleActivity extends BaseActivity {
             else
                 ArticleDao.delete(article.getId());
         }
-
     }
 
     private void prepareForSave() {
-        Bitmap bm = null;
-        if (imageViewThumbnail.getDrawable() != null)
-            bm = ((BitmapDrawable) imageViewThumbnail.getDrawable()).getBitmap();
-
-        if (bm != null && article.getImageBitmap() == null) {
-            byte[] data = ImageUtils.getBitmapAsByteArray(bm);
+        byte[] data = ImageUtils.getByteArrayFromImageView(imageViewThumbnail);
+        if (data != null) {
             article.setImageBitmap(data);
         }
         article.setCreationDate(Calendar.getInstance().getTime());

@@ -28,12 +28,7 @@ public class MainActivity extends BaseActivity {
         // Notifications
         NotificationUtils.createNewsfeedNotificationChannel();
 
-        //Schedule job
-        //     JobDispatcher.stopRefreshArticles(App.getContext());
-        //     JobDispatcher.stopSendNotifications(App.getContext());
-        //   JobDispatcher.scheduleRefreshArticles(App.getContext());
-        //   JobDispatcher.scheduleSendNotification(App.getContext());
-
+        //Job scheduler for update articles and send notifications
         NewsfeedJobScheduler.scheduleJRefreshItemsJob(App.getContext());
 
         BottomNavigationView navigation = findViewById(R.id.navigation);

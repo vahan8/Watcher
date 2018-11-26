@@ -13,14 +13,10 @@ buildscript {
                 'buildTools'    : "28.0.3",
 
                 // dependencies
-                'kotlin'        : "1.3.0",
-                'supportLibrary': "28.0.0",
-                'legacyCoreUi'  : "1.0.0",
-                'lifecycle'     : "2.0.0",
+                'kotlin'        : "1.3.10",
                 'multidex'      : "2.0.0",
-                'annotation'    : "1.0.0",
                 'appcompat'     : "1.0.2",
-                'material'      : "1.0.0",
+                'annotation'    : "1.0.0",
                 'cardview'      : "1.0.0",
                 'recyclerview'  : "1.0.0",
                 'retrofit'      : "2.4.0",
