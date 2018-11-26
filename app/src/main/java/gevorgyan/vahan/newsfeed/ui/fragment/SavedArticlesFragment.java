@@ -4,6 +4,9 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -35,6 +38,9 @@ public class SavedArticlesFragment extends Fragment {
     private RecyclerView recyclerView;
     private TextView emptyView;
 
+    private ListViewMode listViewMode;
+    private MenuItem menuItemListLayoutMode;
+
     public static SavedArticlesFragment newInstance() {
         return new SavedArticlesFragment();
     }
@@ -51,9 +57,10 @@ public class SavedArticlesFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        listViewMode = ListViewMode.LIST;
+
         viewModel = ViewModelProviders.of(this).get(SavedArticlesViewModel.class);
-
-
         viewModel.getArticlesObservable().observe(this, new Observer<List<Article>>() {
             @Override
             public void onChanged(List<Article> articles) {
@@ -92,6 +99,58 @@ public class SavedArticlesFragment extends Fragment {
             }
         });
 
+        setHasOptionsMenu(true);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_saved_articles, menu);
+        menuItemListLayoutMode = menu.findItem(R.id.menu_list_layout_mode);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_list_layout_mode:
+                switch (listViewMode) {
+                    case MINI_CARD:
+                        listViewMode = ListViewMode.LIST;
+                        articlesAdapter.setListViewMode(ListViewMode.LIST);
+                        RecyclerViewUtils.setLayoutManager(requireActivity(), recyclerView, ListViewMode.LIST);
+                        break;
+                    case LIST:
+                        listViewMode = ListViewMode.MINI_CARD;
+                        articlesAdapter.setListViewMode(ListViewMode.MINI_CARD);
+                        RecyclerViewUtils.setLayoutManager(requireActivity(), recyclerView, ListViewMode.MINI_CARD);
+                        break;
+                    default:
+                        break;
+                }
+                syncLayoutModeMenuIcon();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void syncLayoutModeMenuIcon() {
+        switch (listViewMode) {
+            case MINI_CARD:
+                menuItemListLayoutMode.setIcon(R.drawable.ic_view_list_white_36dp);
+                menuItemListLayoutMode.setTitle(R.string.view_mode_list);
+                break;
+            case LIST:
+                menuItemListLayoutMode.setIcon(R.drawable.ic_view_agenda_white_36dp);
+                menuItemListLayoutMode.setTitle(R.string.view_mode_mini_card);
+                break;
+            default:
+                break;
+        }
+    }
 }

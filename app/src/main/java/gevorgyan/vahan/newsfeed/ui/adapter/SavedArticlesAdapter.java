@@ -17,8 +17,8 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import gevorgyan.vahan.newsfeed.R;
-import gevorgyan.vahan.newsfeed.domain.model.Article;
 import gevorgyan.vahan.newsfeed.domain.enums.ListViewMode;
+import gevorgyan.vahan.newsfeed.domain.model.Article;
 
 public class SavedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_LIST = 0;
@@ -31,7 +31,6 @@ public class SavedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.View
     private Context context;
 
     private ItemsClickListener itemClickListener;
-
 
     public interface ItemsClickListener {
         void onClick(Article article, ImageView imageView);
@@ -48,7 +47,6 @@ public class SavedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void setListViewMode(ListViewMode listViewMode) {
         this.listViewMode = listViewMode;
     }
-
 
     public void setItemClickListener(ItemsClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
@@ -104,13 +102,12 @@ public class SavedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.View
         public BaseViewHolder(View itemView) {
             super(itemView);
             initBaseFields();
-
             itemView.setOnClickListener(this);
         }
 
         public abstract void initBaseFields();
 
-        public void bindData(int position) {
+        void bindData(int position) {
             Article article = articles.get(position);
             textViewTitle.setText(article.getWebTitle());
             String caption = context.getString(R.string.caption, article.getSectionName());
@@ -148,32 +145,18 @@ public class SavedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     private class CardViewHolder extends BaseViewHolder implements View.OnClickListener {
-        private TextView textViewItemPrice;
-
         public CardViewHolder(View itemView) {
             super(itemView);
-//            if (customerId != null)
-//                itemView.findViewById(R.id.tablerow_discounted_price).setVisibility(View.VISIBLE);
-//            textViewItemPrice = itemView.findViewById(R.id.textview_item_price);
-//
-//            if (!itemAvailableRemShown)
-//                itemView.findViewById(R.id.tablerow_item_rem).setVisibility(View.GONE);
         }
 
         @Override
         public void initBaseFields() {
             textViewTitle = itemView.findViewById(R.id.textview_title);
             textViewCaption = itemView.findViewById(R.id.textview_caption);
+            textViewDate= itemView.findViewById(R.id.textview_date);
             imageViewThumbnail = itemView.findViewById(R.id.imageview_thumbnail);
 
         }
-//
-//        @Override
-//        public void bindData(int position) {
-//            super.bindData(position);
-//
-//            }
-//        }
     }
 
 }

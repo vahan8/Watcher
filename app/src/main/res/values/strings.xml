@@ -8,7 +8,6 @@
     <string name="unpin">Unpin</string>
     <string name="thumbnail">Thumbnail</string>
     <string name="caption">Caption: %1$s</string>
-
     <string name="notification_channel_id">notification_channel</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="title_home">Home</string>
@@ -16,5 +15,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="favorites">Favorites</string>
+    <string name="view_mode_list">List</string>
+    <string name="view_mode_mini_card">Mini Card</string>
 
 </resources>
