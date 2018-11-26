@@ -98,7 +98,7 @@ public class MainFragment extends Fragment {
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         recyclerView.setItemAnimator(itemAnimator);
         RecyclerViewUtils.setLayoutManager(requireActivity(), recyclerView, ListViewMode.LIST);
-        articlesAdapter = new ArticlesAdapter(requireActivity(), new ArrayList<Article>(), ListViewMode.LIST, recyclerView);
+        articlesAdapter = new ArticlesAdapter(requireActivity(), new ArrayList<Article>(), recyclerView);
         recyclerView.setAdapter(articlesAdapter);
         articlesAdapter.setOnLoadMoreListener(new ArticlesAdapter.OnLoadMoreListener() {
             @Override

@@ -9,10 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,8 +26,6 @@ public class SavedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.View
     private List<Article> articles;
     private ListViewMode listViewMode;
 
-    private Context context;
-
     private ItemsClickListener itemClickListener;
 
     public interface ItemsClickListener {
@@ -39,7 +34,6 @@ public class SavedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public SavedArticlesAdapter(Context context, List<Article> articles, ListViewMode listViewMode) {
         this.inflater = LayoutInflater.from(context);
-        this.context = context;
         this.articles = articles;
         this.listViewMode = listViewMode;
 
