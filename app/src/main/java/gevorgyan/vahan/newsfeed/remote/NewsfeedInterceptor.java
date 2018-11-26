@@ -15,7 +15,7 @@ public class NewsfeedInterceptor implements Interceptor {
         HttpUrl originalHttpUrl = original.url();
 
         HttpUrl url = originalHttpUrl.newBuilder()
-                .addQueryParameter("api-key", Constants.API_KEY)
+                .addQueryParameter("api-key", Constants.API_KEY2)
                 .addQueryParameter("format", "json")
                 .build();
 

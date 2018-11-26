@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +24,13 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import gevorgyan.vahan.newsfeed.R;
-import gevorgyan.vahan.newsfeed.domain.model.Article;
 import gevorgyan.vahan.newsfeed.domain.enums.ListViewMode;
+import gevorgyan.vahan.newsfeed.domain.model.Article;
 import gevorgyan.vahan.newsfeed.ui.activity.ArticleActivity;
-import gevorgyan.vahan.newsfeed.ui.viewmodel.PinnedArticlesViewModel;
 import gevorgyan.vahan.newsfeed.ui.adapter.ArticlesAdapter;
 import gevorgyan.vahan.newsfeed.ui.adapter.PinnedArticlesAdapter;
 import gevorgyan.vahan.newsfeed.ui.viewmodel.MainViewModel;
+import gevorgyan.vahan.newsfeed.ui.viewmodel.PinnedArticlesViewModel;
 import gevorgyan.vahan.newsfeed.util.RecyclerViewUtils;
 
 public class MainFragment extends Fragment {
@@ -42,6 +43,11 @@ public class MainFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView pinnedArticlesRecyclerView;
     private LinearLayout pinnedArticlesLayout;
+    private LinearLayout pinnedArticlesTitleLayout;
+    private ImageView imageViewShowHide;
+    private TextView emptyView;
+
+    private boolean showFavorites = true;
 
     public static final int ACTIVITY_ARTICLE = 1;
 
@@ -56,6 +62,9 @@ public class MainFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerview);
         pinnedArticlesRecyclerView = view.findViewById(R.id.recyclerview_pinned_articles);
         pinnedArticlesLayout = view.findViewById(R.id.layout_pinned_articles);
+        pinnedArticlesTitleLayout = view.findViewById(R.id.layout_pinned_articles_title);
+        imageViewShowHide = view.findViewById(R.id.imageview_show_hide);
+        emptyView = view.findViewById(R.id.textview_empty);
         return view;
     }
 
@@ -67,6 +76,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onChanged(List<Article> articles) {
                 articlesAdapter.swap(articles);
+                setEmptyViewVisibility();
                 Log.e("adapter_articles", "a" + articles.size());
             }
         });
@@ -120,18 +130,23 @@ public class MainFragment extends Fragment {
         });
         pinnedArticlesRecyclerView.setAdapter(pinnedArticlesAdapter);
 
-//        RefreshItemsReceiver receiver = new RefreshItemsReceiver(new RefreshItemsReceiver.RefreshItemsReceiverCallbacks() {
-//            @Override
-//            public void refresh(List<Article> articles) {
-//                Log.e("refresh", "bebebe");
-//                viewModel.refresh();
-//            }
-//        });
-//        IntentFilter statusIntentFilter = new IntentFilter(Constants.BROADCAST_ACTION);
-//
-//        LocalBroadcastManager.getInstance(requireActivity()).registerReceiver(receiver, statusIntentFilter);
-    }
+        pinnedArticlesTitleLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (showFavorites) {
+                    showFavorites = false;
+                    pinnedArticlesRecyclerView.setVisibility(View.GONE);
+                    imageViewShowHide.setImageDrawable(getResources().getDrawable(R.drawable.ic_keyboard_arrow_up_grey_600_24dp));
+                } else {
+                    showFavorites = true;
+                    pinnedArticlesRecyclerView.setVisibility(View.VISIBLE);
+                    imageViewShowHide.setImageDrawable(getResources().getDrawable(R.drawable.ic_keyboard_arrow_down_grey_600_24dp));
+                }
+            }
+        });
+        setEmptyViewVisibility();
 
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -164,9 +179,19 @@ public class MainFragment extends Fragment {
         intent.putExtras(bundle);
 
         // View v = imageView.getRootView();
-       // ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(requireActivity(), imageView, getString(R.string.thumbnail));
-     //   startActivityForResult(intent, ACTIVITY_ARTICLE, options.toBundle());
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(requireActivity(), imageView, getString(R.string.thumbnail));
+        startActivityForResult(intent, ACTIVITY_ARTICLE, options.toBundle());
 
-        startActivityForResult(intent, ACTIVITY_ARTICLE);
+        //startActivityForResult(intent, ACTIVITY_ARTICLE);
+    }
+
+    private void setEmptyViewVisibility() {
+        if (articlesAdapter.getItemCount() == 0) {
+            emptyView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            emptyView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 }

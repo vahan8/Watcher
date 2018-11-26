@@ -16,10 +16,10 @@ public final class NewsfeedJobScheduler {
         JobInfo.Builder builder = new JobInfo.Builder(0, serviceComponent);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            builder.setMinimumLatency(10 * 1000);
-            builder.setOverrideDeadline(10 * 1000);
+            builder.setMinimumLatency(30 * 1000);
+            builder.setOverrideDeadline(30 * 1000);
         } else {
-            builder.setPeriodic(10 * 1000);
+            builder.setPeriodic(30 * 1000);
         }
 
         // builder.setBackoffCriteria(10*1000, JobInfo.BACKOFF_POLICY_LINEAR);
