@@ -79,8 +79,6 @@ public class PinnedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         void bindData(int position) {
             Article article = articles.get(position);
             textViewTitle.setText(article.getWebTitle());
-            //   String caption = context.getString(R.string.caption, article.getSectionName());
-            //  textViewCaption.setText(caption);
             ImageLoader.load(itemView.getContext(), imageViewThumbnail, article.getThumbnailUrl(), null);
         }
 

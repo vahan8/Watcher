@@ -33,7 +33,7 @@ import gevorgyan.vahan.newsfeed.util.RecyclerViewUtils;
 public class SavedArticlesFragment extends Fragment {
 
     private SavedArticlesViewModel viewModel;
-    private SavedArticlesAdapter articlesAdapter;
+    private SavedArticlesAdapter adapter;
 
     private RecyclerView recyclerView;
     private TextView emptyView;
@@ -64,7 +64,7 @@ public class SavedArticlesFragment extends Fragment {
         viewModel.getArticlesObservable().observe(this, new Observer<List<Article>>() {
             @Override
             public void onChanged(List<Article> articles) {
-                articlesAdapter.swap(articles);
+                adapter.swap(articles);
                 if (articles.size() == 0) {
                     emptyView.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
@@ -80,10 +80,10 @@ public class SavedArticlesFragment extends Fragment {
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         recyclerView.setItemAnimator(itemAnimator);
         RecyclerViewUtils.setLayoutManager(requireActivity(), recyclerView, ListViewMode.LIST);
-        articlesAdapter = new SavedArticlesAdapter(requireActivity(), new ArrayList<Article>(), ListViewMode.LIST);
-        recyclerView.setAdapter(articlesAdapter);
+        adapter = new SavedArticlesAdapter(requireActivity(), new ArrayList<Article>(), ListViewMode.LIST);
+        recyclerView.setAdapter(adapter);
 
-        articlesAdapter.setItemClickListener(new SavedArticlesAdapter.ItemsClickListener() {
+        adapter.setItemClickListener(new SavedArticlesAdapter.ItemsClickListener() {
             @Override
             public void onClick(Article article, final ImageView imageView) {
                 Bundle bundle = new Bundle();
@@ -121,36 +121,24 @@ public class SavedArticlesFragment extends Fragment {
                 switch (listViewMode) {
                     case MINI_CARD:
                         listViewMode = ListViewMode.LIST;
-                        articlesAdapter.setListViewMode(ListViewMode.LIST);
+                        adapter.setListViewMode(ListViewMode.LIST);
                         RecyclerViewUtils.setLayoutManager(requireActivity(), recyclerView, ListViewMode.LIST);
+                        menuItemListLayoutMode.setIcon(R.drawable.ic_view_list_white_36dp);
+                        menuItemListLayoutMode.setTitle(R.string.view_mode_list);
                         break;
                     case LIST:
                         listViewMode = ListViewMode.MINI_CARD;
-                        articlesAdapter.setListViewMode(ListViewMode.MINI_CARD);
+                        adapter.setListViewMode(ListViewMode.MINI_CARD);
                         RecyclerViewUtils.setLayoutManager(requireActivity(), recyclerView, ListViewMode.MINI_CARD);
+                        menuItemListLayoutMode.setIcon(R.drawable.ic_view_agenda_white_36dp);
+                        menuItemListLayoutMode.setTitle(R.string.view_mode_mini_card);
                         break;
                     default:
                         break;
                 }
-                syncLayoutModeMenuIcon();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void syncLayoutModeMenuIcon() {
-        switch (listViewMode) {
-            case MINI_CARD:
-                menuItemListLayoutMode.setIcon(R.drawable.ic_view_list_white_36dp);
-                menuItemListLayoutMode.setTitle(R.string.view_mode_list);
-                break;
-            case LIST:
-                menuItemListLayoutMode.setIcon(R.drawable.ic_view_agenda_white_36dp);
-                menuItemListLayoutMode.setTitle(R.string.view_mode_mini_card);
-                break;
-            default:
-                break;
         }
     }
 }

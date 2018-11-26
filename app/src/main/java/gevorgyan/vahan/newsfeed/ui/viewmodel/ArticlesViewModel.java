@@ -1,7 +1,6 @@
 package gevorgyan.vahan.newsfeed.ui.viewmodel;
 
 import android.content.IntentFilter;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +28,7 @@ public class ArticlesViewModel extends ViewModel {
         public void onSuccess(Object response) {
             SearchQueryResponse searchQueryResponse = (SearchQueryResponse) response;
             lastResponsePage = ((SearchQueryResponse) response).getResponse().getCurrentPage();
-            List<Article> articles = articlesObservable.getValue() == null ? new ArrayList<Article>()
-                    : articlesObservable.getValue();
+            List<Article> articles = articlesObservable.getValue() == null ? new ArrayList<Article>() : articlesObservable.getValue();
             articles.addAll(searchQueryResponse.getResponse().getArticles());
             articlesObservable.postValue(articles);
         }
@@ -48,7 +46,6 @@ public class ArticlesViewModel extends ViewModel {
         RefreshItemsReceiver receiver = new RefreshItemsReceiver(new RefreshItemsReceiver.RefreshItemsReceiverCallbacks() {
             @Override
             public void refresh(List<Article> articles) {
-                Log.e("refresh", "bebebe");
                 lastResponsePage = 1;
                 articlesObservable.postValue(articles);
             }
