@@ -29,8 +29,7 @@ public class RefreshItemsJobService extends JobService {
                 if (!firstArticleId.equals(NewsFeedPrefManager.getNewestArticleId())) {
                     NewsFeedPrefManager.setNewestArticleId(firstArticleId);
                     if (App.isVisible()) {
-                        Intent localIntent = new Intent(Constants.BROADCAST_ACTION)
-                                //.putExtra(Constants.SHOULD_REFRESH, true)
+                        Intent localIntent = new Intent(Constants.BROADCAST_REFRESH)
                          .putExtra(RefreshItemsReceiver.KEY_ARTICLES, (Serializable) result.getArticles());
                         LocalBroadcastManager.getInstance(RefreshItemsJobService.this).sendBroadcast(localIntent);
                     } else {

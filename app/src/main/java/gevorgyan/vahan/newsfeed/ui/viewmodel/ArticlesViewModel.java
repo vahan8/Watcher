@@ -50,7 +50,7 @@ public class ArticlesViewModel extends ViewModel {
                 articlesObservable.postValue(articles);
             }
         });
-        IntentFilter statusIntentFilter = new IntentFilter(Constants.BROADCAST_ACTION);
+        IntentFilter statusIntentFilter = new IntentFilter(Constants.BROADCAST_REFRESH);
 
         LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(receiver, statusIntentFilter);
     }

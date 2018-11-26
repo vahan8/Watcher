@@ -9,6 +9,6 @@ public final class Constants {
     public static final String API_KEY2 = "2e9262c7-cadc-47a2-8e88-3193325ca5d7";
     public static final String RESPONSE_FORMAT = "json";
 
-    public static final String BROADCAST_ACTION = "action";
+    public static final String BROADCAST_REFRESH = "refresh";
 
 }

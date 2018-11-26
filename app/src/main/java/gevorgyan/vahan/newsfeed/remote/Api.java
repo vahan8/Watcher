@@ -1,7 +1,5 @@
 package gevorgyan.vahan.newsfeed.remote;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +26,6 @@ public class Api {
             @Override
             public void onResponse(@NonNull Call<SearchQueryResponse> call, @NonNull Response<SearchQueryResponse> response) {
                 SearchQueryResponse searchQueryResponse = response.body();
-                SearchQuery result = searchQueryResponse == null ? new SearchQuery() : searchQueryResponse.getResponse();
-                //  Log.e("body", "b" + response.body());
-                //Log.e("status", "t" + result.getStatus());
-                Log.e("page", "t" + result.getCurrentPage());
                 if (callbacks != null) {
                     if (response.isSuccessful()) {
                         callbacks.onSuccess(searchQueryResponse);

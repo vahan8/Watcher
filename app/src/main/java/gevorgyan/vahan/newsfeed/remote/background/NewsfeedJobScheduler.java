@@ -10,19 +10,20 @@ public final class NewsfeedJobScheduler {
     private NewsfeedJobScheduler() {
     }
 
+    private static final int JOB_PERIOD = 30 * 1000;
 
     public static void scheduleJRefreshItemsJob(Context context) {
         ComponentName serviceComponent = new ComponentName(context, RefreshItemsJobService.class);
         JobInfo.Builder builder = new JobInfo.Builder(0, serviceComponent);
 
+        //Latest versions have problem with periodic jobs less than 15 minutes interval
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            builder.setMinimumLatency(30 * 1000);
-            builder.setOverrideDeadline(30 * 1000);
+            builder.setMinimumLatency(JOB_PERIOD);
+            builder.setOverrideDeadline(JOB_PERIOD);
         } else {
-            builder.setPeriodic(30 * 1000);
+            builder.setPeriodic(JOB_PERIOD);
         }
 
-        // builder.setBackoffCriteria(10*1000, JobInfo.BACKOFF_POLICY_LINEAR);
         builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
         builder.setRequiresCharging(false);
         JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
