@@ -26,6 +26,8 @@ public class Article implements Serializable {
 
     private boolean pinned;
 
+    private boolean saved;
+
     private Date creationDate;
 
     private byte[] imageBitmap;
@@ -43,6 +45,8 @@ public class Article implements Serializable {
         this.webUrl = webUrl;
         this.apiUrl = apiUrl;
         this.thumbnailUrl = thumbnailUrl;
+        this.pinned = false;
+        this.saved = false;
     }
 
     public String getId() {
@@ -123,6 +127,14 @@ public class Article implements Serializable {
 
     public void setPinned(boolean pinned) {
         this.pinned = pinned;
+    }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
     }
 
     public byte[] getImageBitmap() {

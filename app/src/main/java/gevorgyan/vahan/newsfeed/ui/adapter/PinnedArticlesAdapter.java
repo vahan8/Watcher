@@ -19,8 +19,6 @@ public class PinnedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private LayoutInflater inflater;
     private List<Article> articles;
 
-    private Context context;
-
     private ItemsClickListener itemClickListener;
 
     public interface ItemsClickListener {
@@ -29,7 +27,6 @@ public class PinnedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public PinnedArticlesAdapter(Context context, List<Article> articles) {
         this.inflater = LayoutInflater.from(context);
-        this.context = context;
         this.articles = articles;
 
     }
@@ -65,21 +62,21 @@ public class PinnedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
 
     private class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        protected TextView textViewTitle;
-        protected TextView textViewCaption;
-        protected ImageView imageViewThumbnail;
+        TextView textViewTitle;
+        TextView textViewCaption;
+        private ImageView imageViewThumbnail;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.textview_title);
             textViewCaption = itemView.findViewById(R.id.textview_caption);
-            imageViewThumbnail = itemView.findViewById(R.id.imageview_thumbnail);
+            imageViewThumbnail = itemView.findViewById(R.id.imageview_pinned_thumbnail);
 
             itemView.setOnClickListener(this);
         }
 
 
-        public void bindData(int position) {
+        void bindData(int position) {
             Article article = articles.get(position);
             textViewTitle.setText(article.getWebTitle());
             //   String caption = context.getString(R.string.caption, article.getSectionName());

@@ -20,7 +20,7 @@ public class SavedArticlesViewModel extends ViewModel {
     }
 
     public void loadData() {
-        List<Article> savedArticles = ArticleDao.getArticles(false);
+        List<Article> savedArticles = ArticleDao.getArticles(null, true);
         articlesObservable.postValue(savedArticles);
     }
 

@@ -1,13 +1,10 @@
 package gevorgyan.vahan.newsfeed.ui.activity;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -16,13 +13,11 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import gevorgyan.vahan.newsfeed.R;
 import gevorgyan.vahan.newsfeed.data.dao.ArticleDao;
 import gevorgyan.vahan.newsfeed.domain.model.Article;
 import gevorgyan.vahan.newsfeed.remote.glide.ImageLoader;
-import gevorgyan.vahan.newsfeed.ui.activity.BaseActivity;
 import gevorgyan.vahan.newsfeed.util.ImageUtils;
 
 public class ArticleActivity extends BaseActivity {
@@ -90,17 +85,11 @@ public class ArticleActivity extends BaseActivity {
                 finish();
                 return true;
             case R.id.menu_save:
-                article.setPinned(false);
-                checkAndSave();
+                save();
                 finish();
                 return true;
             case R.id.menu_pin:
-                if (!article.isPinned()) {
-                    article.setPinned(true);
-                    checkAndSave();
-                } else {
-                    ArticleDao.delete(article.getId());
-                }
+                pin();
                 setResult(RESULT_OK);
                 finish();
                 return true;
@@ -109,12 +98,39 @@ public class ArticleActivity extends BaseActivity {
         }
     }
 
-    private void checkAndSave() {
-        if (!ArticleDao.exists(article.getId()))
-            save();
+    private void save() {
+        article.setSaved(true);
+        prepareForSave();
+        if (!ArticleDao.exists(article.getId())) {
+            article.setPinned(false);
+            ArticleDao.insert(article);
+        } else
+            ArticleDao.update(article);
     }
 
-    private void save() {
+    private void pin() {
+        if (!ArticleDao.exists(article.getId())) {
+            article.setPinned(true);
+            article.setSaved(false);
+            prepareForSave();
+            ArticleDao.insert(article);
+            return;
+        }
+
+        if (!article.isPinned()) {
+            article.setPinned(true);
+            prepareForSave();
+            ArticleDao.update(article);
+        } else {
+            if (article.isSaved())
+                ArticleDao.update(article);
+            else
+                ArticleDao.delete(article.getId());
+        }
+
+    }
+
+    private void prepareForSave() {
         Bitmap bm = null;
         if (imageViewThumbnail.getDrawable() != null)
             bm = ((BitmapDrawable) imageViewThumbnail.getDrawable()).getBitmap();
@@ -124,8 +140,6 @@ public class ArticleActivity extends BaseActivity {
             article.setImageBitmap(data);
         }
         article.setCreationDate(Calendar.getInstance().getTime());
-
-        ArticleDao.insert(article);
     }
 
 }

@@ -157,13 +157,16 @@ public class MainFragment extends Fragment {
     }
 
     private void openArticle(Article article, final ImageView imageView) {
+        article.setImageBitmap(null);
         Bundle bundle = new Bundle();
         bundle.putSerializable(ArticleActivity.KEY_ARTICLE, article);
         Intent intent = new Intent(requireActivity(), ArticleActivity.class);
         intent.putExtras(bundle);
 
         // View v = imageView.getRootView();
-        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(requireActivity(), imageView, getString(R.string.thumbnail));
-        startActivityForResult(intent, ACTIVITY_ARTICLE, options.toBundle());
+       // ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(requireActivity(), imageView, getString(R.string.thumbnail));
+     //   startActivityForResult(intent, ACTIVITY_ARTICLE, options.toBundle());
+
+        startActivityForResult(intent, ACTIVITY_ARTICLE);
     }
 }

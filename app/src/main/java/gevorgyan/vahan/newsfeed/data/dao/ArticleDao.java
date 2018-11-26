@@ -25,6 +25,7 @@ public class ArticleDao {
     public static final String API_URL = "fAPIURL";
     public static final String THUMBNAIL_URL = "fTHUMBNAILURL";
     public static final String IS_PINNED = "fISPINNED";
+    public static final String IS_SAVED = "fISSAVED";
     public static final String CREATTION_DATE = "fCREATIONDATE";
     public static final String IMAGE = "fIMAGE";
 
@@ -63,6 +64,7 @@ public class ArticleDao {
                 cv.put(API_URL, article.getApiUrl());
                 cv.put(THUMBNAIL_URL, article.getThumbnailUrl());
                 cv.put(IS_PINNED, article.isPinned());
+                cv.put(IS_SAVED, article.isSaved());
                 cv.put(CREATTION_DATE, article.getCreationDate().getTime());
                 cv.put(IMAGE, article.getImageBitmap());
                 db.insert(TABLE_NAME, null, cv);
@@ -88,7 +90,33 @@ public class ArticleDao {
         }
     }
 
-    private static Cursor getArticlesCursor(String articleId, Boolean onlyPinned, String... orderByColumns) throws SQLiteException {
+    public static void update(Article article) throws SQLiteException {
+        SQLiteDatabase db = DbHelper.getInstance().getWritableDatabase();
+        db.beginTransaction();
+        try {
+            String where = ID + " = ? ";
+            ContentValues cv = new ContentValues();
+            cv.put(ID, article.getId());
+            cv.put(SECTION_ID, article.getSectionId());
+            cv.put(SECTION_NAME, article.getSectionName());
+            cv.put(WEB_PUBLICATION_DATE, article.getWebPublicationDate().getTime());
+            cv.put(WEB_TITLE, article.getWebTitle());
+            cv.put(WEB_URL, article.getWebUrl());
+            cv.put(API_URL, article.getApiUrl());
+            cv.put(THUMBNAIL_URL, article.getThumbnailUrl());
+            cv.put(IS_PINNED, article.isPinned());
+            cv.put(IS_SAVED, article.isSaved());
+            cv.put(CREATTION_DATE, article.getCreationDate().getTime());
+            cv.put(IMAGE, article.getImageBitmap());
+            db.update(TABLE_NAME, cv, where, new String[]{article.getId()});
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
+
+    private static Cursor getArticlesCursor(String articleId, Boolean isPinned, Boolean isSaved, String... orderByColumns) throws SQLiteException {
         SQLiteDatabase db = DbHelper.getInstance().getReadableDatabase();
         String sql = "select "
                 + ID                    + " , "
@@ -100,6 +128,7 @@ public class ArticleDao {
                 + API_URL               + " , "
                 + THUMBNAIL_URL         + " , "
                 + IS_PINNED             + " , "
+                + IS_SAVED              + " , "
                 + CREATTION_DATE        + " , "
                 + IMAGE                 + " , "
                 + "rowid as _id "
@@ -114,9 +143,15 @@ public class ArticleDao {
             whereAnd = " and ";
         }
 
-        if (onlyPinned != null) {
+        if (isPinned != null) {
             sql += whereAnd + IS_PINNED + "=?";
-            args.add(onlyPinned ? "1" : "0");
+            args.add(isPinned ? "1" : "0");
+            whereAnd = " and ";
+        }
+
+        if (isSaved != null) {
+            sql += whereAnd + IS_SAVED + "=?";
+            args.add(isSaved ? "1" : "0");
             whereAnd = " and ";
         }
 
@@ -130,9 +165,9 @@ public class ArticleDao {
         return cursor;
     }
 
-    public static List<Article> getArticles(Boolean onlyPinned) throws SQLiteException {
+    public static List<Article> getArticles(Boolean isPinned, Boolean isSaved) throws SQLiteException {
         List<Article> articles = new ArrayList<>();
-        Cursor cursor = getArticlesCursor(null, onlyPinned, CREATTION_DATE + " asc ");
+        Cursor cursor = getArticlesCursor(null, isPinned, isSaved, CREATTION_DATE + " asc ");
         if (cursor.moveToFirst()) {
             do {
                 Article article = new Article();
@@ -145,6 +180,7 @@ public class ArticleDao {
                 article.setApiUrl(cursor.getString(cursor.getColumnIndex(API_URL)));
                 article.setThumbnailUrl(cursor.getString(cursor.getColumnIndex(THUMBNAIL_URL)));
                 article.setPinned(cursor.getInt(cursor.getColumnIndex(IS_PINNED)) != 0);
+                article.setSaved(cursor.getInt(cursor.getColumnIndex(IS_SAVED)) != 0);
                 article.setImageBitmap(cursor.getBlob(cursor.getColumnIndex(IMAGE)));
                 articles.add(article);
             } while (cursor.moveToNext());
@@ -155,7 +191,7 @@ public class ArticleDao {
 
     public static Article getArticle(String articleId) throws SQLiteException {
         Article article = null;
-        Cursor cursor = getArticlesCursor(articleId, null);
+        Cursor cursor = getArticlesCursor(articleId, null, null);
         if (cursor.moveToFirst()) {
             article = new Article();
             article.setId(cursor.getString(cursor.getColumnIndex(ID)));
@@ -167,6 +203,7 @@ public class ArticleDao {
             article.setApiUrl(cursor.getString(cursor.getColumnIndex(API_URL)));
             article.setThumbnailUrl(cursor.getString(cursor.getColumnIndex(THUMBNAIL_URL)));
             article.setPinned(cursor.getInt(cursor.getColumnIndex(IS_PINNED)) != 0);
+            article.setSaved(cursor.getInt(cursor.getColumnIndex(IS_SAVED)) != 0);
             article.setImageBitmap(cursor.getBlob(cursor.getColumnIndex(IMAGE)));
         }
         cursor.close();

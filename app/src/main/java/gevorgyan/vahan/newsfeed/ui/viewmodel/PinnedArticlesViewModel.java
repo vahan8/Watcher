@@ -20,7 +20,7 @@ public class PinnedArticlesViewModel extends ViewModel {
     }
 
     public void loadData() {
-        List<Article> savedArticles = ArticleDao.getArticles(true);
+        List<Article> savedArticles = ArticleDao.getArticles(true, null);
         articlesObservable.postValue(savedArticles);
     }
 

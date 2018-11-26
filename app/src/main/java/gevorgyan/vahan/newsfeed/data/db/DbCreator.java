@@ -18,6 +18,7 @@ public class DbCreator {
                 + ArticleDao.API_URL              + " text,"
                 + ArticleDao.THUMBNAIL_URL        + " text,"
                 + ArticleDao.IS_PINNED            + " integer,"
+                + ArticleDao.IS_SAVED             + " integer,"
                 + ArticleDao.CREATTION_DATE       + " integer,"
                 + ArticleDao.IMAGE                + " blob)");
     }
