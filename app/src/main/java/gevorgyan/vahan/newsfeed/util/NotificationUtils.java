@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 import gevorgyan.vahan.newsfeed.App;
 import gevorgyan.vahan.newsfeed.R;
 import gevorgyan.vahan.newsfeed.ui.activity.MainActivity;
@@ -46,7 +45,7 @@ public final class NotificationUtils {
     public static Notification createSimpleNotification(String title, String message, PendingIntent pendingIntent, String channelId) {
         Context context = App.getContext();
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.mipmap.ic_launcher2)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(title == null ? context.getString(R.string.app_name) : title)
                 .setContentText(message)
                // .setColor(ContextCompat.getColor(context, R.color.colorPrimary))

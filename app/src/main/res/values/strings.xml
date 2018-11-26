@@ -7,7 +7,6 @@
     <string name="pin">Pin</string>
     <string name="unpin">Unpin</string>
     <string name="thumbnail">Thumbnail</string>
-    <string name="caption">Caption: %1$s</string>
     <string name="notification_channel_id">notification_channel</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="title_home">Home</string>
