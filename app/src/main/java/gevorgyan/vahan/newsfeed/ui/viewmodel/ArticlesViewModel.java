@@ -18,7 +18,7 @@ import gevorgyan.vahan.newsfeed.remote.RequestCallbacks;
 import gevorgyan.vahan.newsfeed.remote.background.RefreshItemsReceiver;
 import gevorgyan.vahan.newsfeed.util.Constants;
 
-public class MainViewModel extends ViewModel {
+public class ArticlesViewModel extends ViewModel {
     private MutableLiveData<List<Article>> articlesObservable;
     private SearchRequestCallbacks callbacks;
 
@@ -41,7 +41,7 @@ public class MainViewModel extends ViewModel {
         }
     }
 
-    public MainViewModel() {
+    public ArticlesViewModel() {
         this.articlesObservable = new MutableLiveData<>();
         this.callbacks = new SearchRequestCallbacks();
 

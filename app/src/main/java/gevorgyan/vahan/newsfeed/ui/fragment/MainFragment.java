@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,13 +28,12 @@ import gevorgyan.vahan.newsfeed.domain.model.Article;
 import gevorgyan.vahan.newsfeed.ui.activity.ArticleActivity;
 import gevorgyan.vahan.newsfeed.ui.adapter.ArticlesAdapter;
 import gevorgyan.vahan.newsfeed.ui.adapter.PinnedArticlesAdapter;
-import gevorgyan.vahan.newsfeed.ui.viewmodel.MainViewModel;
+import gevorgyan.vahan.newsfeed.ui.viewmodel.ArticlesViewModel;
 import gevorgyan.vahan.newsfeed.ui.viewmodel.PinnedArticlesViewModel;
 import gevorgyan.vahan.newsfeed.util.RecyclerViewUtils;
 
 public class MainFragment extends Fragment {
-
-    private MainViewModel viewModel;
+    private ArticlesViewModel articlesViewModel;
     private PinnedArticlesViewModel pinnedArticlesViewModel;
     private ArticlesAdapter articlesAdapter;
     private PinnedArticlesAdapter pinnedArticlesAdapter;
@@ -49,7 +47,7 @@ public class MainFragment extends Fragment {
 
     private boolean showFavorites = true;
 
-    public static final int ACTIVITY_ARTICLE = 1;
+    private static final int ACTIVITY_ARTICLE = 1;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -71,16 +69,15 @@ public class MainFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        viewModel.getArticlesObservable().observe(this, new Observer<List<Article>>() {
+        articlesViewModel = ViewModelProviders.of(this).get(ArticlesViewModel.class);
+        articlesViewModel.getArticlesObservable().observe(this, new Observer<List<Article>>() {
             @Override
             public void onChanged(List<Article> articles) {
                 articlesAdapter.swap(articles);
                 setEmptyViewVisibility();
-                Log.e("adapter_articles", "a" + articles.size());
             }
         });
-        viewModel.loadData(1);
+        articlesViewModel.loadData(1);
 
         pinnedArticlesViewModel = ViewModelProviders.of(this).get(PinnedArticlesViewModel.class);
         pinnedArticlesViewModel.getArticlesObservable().observe(this, new Observer<List<Article>>() {
@@ -103,8 +100,7 @@ public class MainFragment extends Fragment {
         articlesAdapter.setOnLoadMoreListener(new ArticlesAdapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                List<Article> articles = viewModel.getArticlesObservable().getValue();
-                viewModel.loadData(viewModel.getLastResponsePage() + 1);
+                articlesViewModel.loadData(articlesViewModel.getLastResponsePage() + 1);
             }
         });
         articlesAdapter.setItemClickListener(new ArticlesAdapter.ItemsClickListener() {
@@ -113,7 +109,6 @@ public class MainFragment extends Fragment {
                 openArticle(article, imageView);
             }
         });
-
 
         itemAnimator = new DefaultItemAnimator();
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -161,16 +156,6 @@ public class MainFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
     private void openArticle(Article article, final ImageView imageView) {
         article.setImageBitmap(null);
         Bundle bundle = new Bundle();
@@ -178,11 +163,8 @@ public class MainFragment extends Fragment {
         Intent intent = new Intent(requireActivity(), ArticleActivity.class);
         intent.putExtras(bundle);
 
-        // View v = imageView.getRootView();
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(requireActivity(), imageView, getString(R.string.thumbnail));
         startActivityForResult(intent, ACTIVITY_ARTICLE, options.toBundle());
-
-        //startActivityForResult(intent, ACTIVITY_ARTICLE);
     }
 
     private void setEmptyViewVisibility() {
