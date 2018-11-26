@@ -5,8 +5,6 @@ import android.content.Context;
 
 import com.facebook.stetho.Stetho;
 
-import gevorgyan.vahan.newsfeed.util.JobDispatcher;
-
 public class App extends Application {
     private static App instance;
 
@@ -21,8 +19,6 @@ public class App extends Application {
         super.onCreate();
         instance = this;
         visible = true;
-
-        JobDispatcher.init(this);
 
         if (BuildConfig.DEBUG) {
             Stetho.initialize(Stetho.newInitializerBuilder(this)

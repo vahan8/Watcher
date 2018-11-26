@@ -4,7 +4,6 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 
 import java.io.Serializable;
 
@@ -22,12 +21,10 @@ public class RefreshItemsJobService extends JobService {
 
     @Override
     public boolean onStartJob(final JobParameters job) {
-        Log.e("job_refresh", "started");
         RequestCallbacks callbacks = new RequestCallbacks() {
             @Override
             public void onSuccess(Object response) {
                 SearchQuery result = ((SearchQueryResponse) response).getResponse();
-                Log.e("total", "t" + result.getTotal());
                 String firstArticleId = result.getSearchArticles().get(0).getId();
                 if (!firstArticleId.equals(NewsFeedPrefManager.getNewestArticleId())) {
                     NewsFeedPrefManager.setNewestArticleId(firstArticleId);

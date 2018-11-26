@@ -48,8 +48,6 @@ dependencies {
     // Utils
     implementation 'com.google.code.gson:gson:2.8.5'
 
-    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
-
     //Test
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
