@@ -49,7 +49,7 @@ public final class NotificationUtils {
                 .setSmallIcon(R.mipmap.ic_launcher2)
                 .setContentTitle(title == null ? context.getString(R.string.app_name) : title)
                 .setContentText(message)
-                .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
+               // .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 .setAutoCancel(true)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setDefaults(Notification.DEFAULT_ALL)

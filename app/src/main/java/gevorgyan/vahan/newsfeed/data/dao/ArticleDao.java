@@ -74,11 +74,13 @@ public class ArticleDao {
         }
     }
 
-    public static void deleteTable() throws SQLiteException {
+    public static void delete(String articleId) throws SQLiteException {
         SQLiteDatabase db = DbHelper.getInstance().getWritableDatabase();
         try {
             db.beginTransaction();
-            db.delete(TABLE_NAME, null, null);
+            String whereClause = ID + "=?";
+            String [] whereArgs = new String[] {articleId};
+            db.delete(TABLE_NAME, whereClause, whereArgs);
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -129,7 +131,7 @@ public class ArticleDao {
     }
 
     public static List<Article> getArticles(Boolean onlyPinned) throws SQLiteException {
-        List<Article> itemAvailableRems = new ArrayList<>();
+        List<Article> articles = new ArrayList<>();
         Cursor cursor = getArticlesCursor(null, onlyPinned, CREATTION_DATE + " asc ");
         if (cursor.moveToFirst()) {
             do {
@@ -142,18 +144,37 @@ public class ArticleDao {
                 article.setWebUrl(cursor.getString(cursor.getColumnIndex(WEB_URL)));
                 article.setApiUrl(cursor.getString(cursor.getColumnIndex(API_URL)));
                 article.setThumbnailUrl(cursor.getString(cursor.getColumnIndex(THUMBNAIL_URL)));
-                article.setPinned(cursor.getInt(cursor.getColumnIndex(THUMBNAIL_URL)) != 0);
+                article.setPinned(cursor.getInt(cursor.getColumnIndex(IS_PINNED)) != 0);
                 article.setImageBitmap(cursor.getBlob(cursor.getColumnIndex(IMAGE)));
-                itemAvailableRems.add(article);
+                articles.add(article);
             } while (cursor.moveToNext());
         }
         cursor.close();
-        return itemAvailableRems;
+        return articles;
+    }
+
+    public static Article getArticle(String articleId) throws SQLiteException {
+        Article article = null;
+        Cursor cursor = getArticlesCursor(articleId, null);
+        if (cursor.moveToFirst()) {
+            article = new Article();
+            article.setId(cursor.getString(cursor.getColumnIndex(ID)));
+            article.setSectionId(cursor.getString(cursor.getColumnIndex(SECTION_ID)));
+            article.setSectionName(cursor.getString(cursor.getColumnIndex(SECTION_NAME)));
+            article.setWebPublicationDate(new Date(cursor.getLong(cursor.getColumnIndex(WEB_PUBLICATION_DATE))));
+            article.setWebTitle(cursor.getString(cursor.getColumnIndex(WEB_TITLE)));
+            article.setWebUrl(cursor.getString(cursor.getColumnIndex(WEB_URL)));
+            article.setApiUrl(cursor.getString(cursor.getColumnIndex(API_URL)));
+            article.setThumbnailUrl(cursor.getString(cursor.getColumnIndex(THUMBNAIL_URL)));
+            article.setPinned(cursor.getInt(cursor.getColumnIndex(IS_PINNED)) != 0);
+            article.setImageBitmap(cursor.getBlob(cursor.getColumnIndex(IMAGE)));
+        }
+        cursor.close();
+        return article;
     }
 
     public static boolean exists(String articleId){
-        Cursor cursor = getArticlesCursor(articleId, null);
-        return cursor.moveToFirst();
+        return getArticle(articleId) != null;
     }
 
 }

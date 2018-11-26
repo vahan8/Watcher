@@ -15,8 +15,8 @@ import gevorgyan.vahan.newsfeed.domain.model.Article;
 import gevorgyan.vahan.newsfeed.domain.model.SearchQueryResponse;
 import gevorgyan.vahan.newsfeed.remote.Api;
 import gevorgyan.vahan.newsfeed.remote.RequestCallbacks;
-import gevorgyan.vahan.newsfeed.util.Constants;
 import gevorgyan.vahan.newsfeed.remote.background.RefreshItemsReceiver;
+import gevorgyan.vahan.newsfeed.util.Constants;
 
 public class MainViewModel extends ViewModel {
     private MutableLiveData<List<Article>> articlesObservable;
@@ -29,7 +29,8 @@ public class MainViewModel extends ViewModel {
         public void onSuccess(Object response) {
             SearchQueryResponse searchQueryResponse = (SearchQueryResponse) response;
             lastResponsePage = ((SearchQueryResponse) response).getResponse().getCurrentPage();
-            List<Article> articles = articlesObservable.getValue() == null ? new ArrayList<Article>() : articlesObservable.getValue();
+            List<Article> articles = articlesObservable.getValue() == null ? new ArrayList<Article>()
+                    : articlesObservable.getValue();
             articles.addAll(searchQueryResponse.getResponse().getArticles());
             articlesObservable.postValue(articles);
         }
@@ -48,6 +49,7 @@ public class MainViewModel extends ViewModel {
             @Override
             public void refresh(List<Article> articles) {
                 Log.e("refresh", "bebebe");
+                lastResponsePage = 1;
                 articlesObservable.postValue(articles);
             }
         });
@@ -56,13 +58,8 @@ public class MainViewModel extends ViewModel {
         LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(receiver, statusIntentFilter);
     }
 
-
     public LiveData<List<Article>> getArticlesObservable() {
         return articlesObservable;
-    }
-
-    public SearchRequestCallbacks getCallbacks() {
-        return callbacks;
     }
 
     public int getLastResponsePage() {
@@ -72,11 +69,5 @@ public class MainViewModel extends ViewModel {
     public void loadData(int page) {
         Api.downloadArticles(page, callbacks);
     }
-
-    public void refresh() {
-        articlesObservable.postValue(new ArrayList<Article>());
-        Api.downloadArticles(1, callbacks);
-    }
-
 
 }

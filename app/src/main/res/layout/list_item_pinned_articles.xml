@@ -20,6 +20,7 @@
               android:orientation="horizontal">
 
     <ImageView
+        android:transitionName="@string/thumbnail"
         android:id="@+id/imageview_thumbnail"
         android:layout_width="150dp"
         android:layout_height="100dp"/>

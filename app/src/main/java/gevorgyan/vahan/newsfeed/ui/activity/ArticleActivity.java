@@ -1,10 +1,13 @@
 package gevorgyan.vahan.newsfeed.ui.activity;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import gevorgyan.vahan.newsfeed.R;
 import gevorgyan.vahan.newsfeed.data.dao.ArticleDao;
@@ -39,6 +43,11 @@ public class ArticleActivity extends BaseActivity {
         Bundle bundle = getIntent().getExtras();
         article = (Article) bundle.getSerializable(KEY_ARTICLE);
 
+        Article articleFromDb = ArticleDao.getArticle(article.getId());
+        if (articleFromDb != null)
+            article = articleFromDb;
+        Log.e("pinned0", "" + article.isPinned());
+
         setTitle(article.getSectionName());
 
         // Handle Toolbar
@@ -59,12 +68,18 @@ public class ArticleActivity extends BaseActivity {
         // can be checked if no network connection than use cache else network
         webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         webView.loadUrl(article.getWebUrl());
-
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_article, menu);
+        Log.e("pinned", "" + article.isPinned());
+        if (article.isPinned()) {
+            MenuItem menuItemPin = menu.findItem(R.id.menu_pin);
+            menuItemPin.setTitle(R.string.unpin);
+            menuItemPin.setIcon(R.drawable.ic_bookmark_border_white_36dp);
+        }
         return true;
     }
 
@@ -80,8 +95,12 @@ public class ArticleActivity extends BaseActivity {
                 finish();
                 return true;
             case R.id.menu_pin:
-                article.setPinned(true);
-                checkAndSave();
+                if (!article.isPinned()) {
+                    article.setPinned(true);
+                    checkAndSave();
+                } else {
+                    ArticleDao.delete(article.getId());
+                }
                 setResult(RESULT_OK);
                 finish();
                 return true;
@@ -91,7 +110,6 @@ public class ArticleActivity extends BaseActivity {
     }
 
     private void checkAndSave() {
-        Log.e("exist", "" + ArticleDao.exists(article.getId()));
         if (!ArticleDao.exists(article.getId()))
             save();
     }

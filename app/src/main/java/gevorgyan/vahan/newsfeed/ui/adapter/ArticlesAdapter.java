@@ -164,8 +164,8 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             textViewTitle.setText(article.getWebTitle());
             Date date = article.getWebPublicationDate();
             SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yy HH:mm", Locale.getDefault());
-            String publicatinDate = formatter.format(date);
-            textViewDate.setText(publicatinDate);
+            String publicationDate = formatter.format(date);
+            textViewDate.setText(publicationDate);
             String caption = context.getString(R.string.caption, article.getSectionName());
             textViewCaption.setText(article.getSectionName());
             ImageLoader.load(itemView.getContext(), imageViewThumbnail, article.getThumbnailUrl(), null);

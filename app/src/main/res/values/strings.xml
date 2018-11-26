@@ -4,6 +4,8 @@
     <string name="empty_data">No data</string>
     <string name="article">Article</string>
     <string name="save">Save</string>
+    <string name="pin">Pin</string>
+    <string name="unpin">Unpin</string>
     <string name="thumbnail">Thumbnail</string>
     <string name="caption">Caption: %1$s</string>
 

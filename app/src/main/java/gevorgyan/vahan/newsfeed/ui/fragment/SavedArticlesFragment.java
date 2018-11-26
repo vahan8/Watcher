@@ -73,7 +73,7 @@ public class SavedArticlesFragment extends Fragment {
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         recyclerView.setItemAnimator(itemAnimator);
         RecyclerViewUtils.setLayoutManager(requireActivity(), recyclerView, ListViewMode.LIST);
-        articlesAdapter = new SavedArticlesAdapter(requireActivity(), new ArrayList<Article>(), ListViewMode.LIST, recyclerView);
+        articlesAdapter = new SavedArticlesAdapter(requireActivity(), new ArrayList<Article>(), ListViewMode.LIST);
         recyclerView.setAdapter(articlesAdapter);
 
         articlesAdapter.setItemClickListener(new SavedArticlesAdapter.ItemsClickListener() {

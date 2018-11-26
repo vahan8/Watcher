@@ -9,7 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,7 +37,7 @@ public class SavedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.View
         void onClick(Article article, ImageView imageView);
     }
 
-    public SavedArticlesAdapter(Context context, List<Article> articles, ListViewMode listViewMode, RecyclerView recyclerView) {
+    public SavedArticlesAdapter(Context context, List<Article> articles, ListViewMode listViewMode) {
         this.inflater = LayoutInflater.from(context);
         this.context = context;
         this.articles = articles;
@@ -96,6 +99,7 @@ public class SavedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.View
         protected TextView textViewTitle;
         protected TextView textViewCaption;
         protected ImageView imageViewThumbnail;
+        protected TextView textViewDate;
 
         public BaseViewHolder(View itemView) {
             super(itemView);
@@ -111,6 +115,10 @@ public class SavedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.View
             textViewTitle.setText(article.getWebTitle());
             String caption = context.getString(R.string.caption, article.getSectionName());
             textViewCaption.setText(article.getSectionName());
+            Date date = article.getWebPublicationDate();
+            SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yy HH:mm", Locale.getDefault());
+            String publicationDate = formatter.format(date);
+            textViewDate.setText(publicationDate);
 
             Bitmap bm = BitmapFactory.decodeByteArray(article.getImageBitmap(), 0, article.getImageBitmap().length);
             imageViewThumbnail.setImageBitmap(bm);
@@ -134,6 +142,7 @@ public class SavedArticlesAdapter extends RecyclerView.Adapter<RecyclerView.View
         public void initBaseFields() {
             textViewTitle = itemView.findViewById(R.id.textview_title);
             textViewCaption = itemView.findViewById(R.id.textview_caption);
+            textViewDate= itemView.findViewById(R.id.textview_date);
             imageViewThumbnail = itemView.findViewById(R.id.imageview_thumbnail);
         }
     }
