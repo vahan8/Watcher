@@ -123,14 +123,14 @@ public class SavedArticlesFragment extends Fragment {
                         listViewMode = ListViewMode.LIST;
                         adapter.setListViewMode(ListViewMode.LIST);
                         RecyclerViewUtils.setLayoutManager(requireActivity(), recyclerView, ListViewMode.LIST);
-                        menuItemListLayoutMode.setIcon(R.drawable.ic_view_list_white_36dp);
+                        menuItemListLayoutMode.setIcon(R.drawable.ic_view_agenda_white_36dp);
                         menuItemListLayoutMode.setTitle(R.string.view_mode_list);
                         break;
                     case LIST:
                         listViewMode = ListViewMode.MINI_CARD;
                         adapter.setListViewMode(ListViewMode.MINI_CARD);
                         RecyclerViewUtils.setLayoutManager(requireActivity(), recyclerView, ListViewMode.MINI_CARD);
-                        menuItemListLayoutMode.setIcon(R.drawable.ic_view_agenda_white_36dp);
+                        menuItemListLayoutMode.setIcon(R.drawable.ic_view_list_white_36dp);
                         menuItemListLayoutMode.setTitle(R.string.view_mode_mini_card);
                         break;
                     default:
