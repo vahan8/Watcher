@@ -45,10 +45,9 @@ public final class NotificationUtils {
     public static Notification createSimpleNotification(String title, String message, PendingIntent pendingIntent, String channelId) {
         Context context = App.getContext();
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_app_notification)
                 .setContentTitle(title == null ? context.getString(R.string.app_name) : title)
                 .setContentText(message)
-               // .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 .setAutoCancel(true)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setDefaults(Notification.DEFAULT_ALL)
